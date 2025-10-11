@@ -1,4 +1,4 @@
-package controller.itemController;
+package service;
 
 import javafx.collections.ObservableList;
 import model.dto.Item;
@@ -13,6 +13,6 @@ public interface ItemService {
 
     void updateItem(Item updateItem);
 
-    Item searchItem(String itemCode, String description);
+    Item searchItem(String itemCode);
 
 }

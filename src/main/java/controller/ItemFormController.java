@@ -1,4 +1,4 @@
-package controller.itemController;
+package controller;
 
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
@@ -9,13 +9,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.dto.Item;
+import service.ItemService;
+import service.impl.ItemServiceImp;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ItemFormController implements Initializable {
 
-    ItemService itemService = new ItemController();
+    ItemService itemService = new ItemServiceImp();
 
     @FXML
     private JFXButton btnAdd;
@@ -90,7 +92,7 @@ public class ItemFormController implements Initializable {
 
     @FXML
     void btnSearchOnAction(ActionEvent event) {
-        Item searchItem = itemService.searchItem(txtItemCode.getText(), txtDescription.getText());
+        Item searchItem = itemService.searchItem(txtItemCode.getText());
         txtItemCode.setText(searchItem.getItemCode());
         txtDescription.setText(searchItem.getDescription());
         txtPackSize.setText(searchItem.getPackSize());

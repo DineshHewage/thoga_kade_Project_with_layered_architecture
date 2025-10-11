@@ -47,9 +47,21 @@ public class DashboardFormController {
         itemStage.show();
     }
 
+
     @FXML
     void btnOrderOnAction(ActionEvent event) {
-
     }
 
+    Stage placeOrderStage = new Stage();
+    @FXML
+    public void btnPlaceAnOrderOnAction(ActionEvent actionEvent) {
+        placeOrderStage.setTitle("Place Order");
+        try {
+            placeOrderStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/PlaceOrder.fxml"))));
+            placeOrderStage.setResizable(false);
+            placeOrderStage.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
