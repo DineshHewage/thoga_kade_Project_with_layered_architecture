@@ -1,7 +1,6 @@
 package model.dto;
 
 import lombok.*;
-
 import java.time.LocalDate;
 
 @Getter

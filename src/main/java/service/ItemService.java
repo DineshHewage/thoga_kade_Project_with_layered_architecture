@@ -1,6 +1,7 @@
 package service;
 
 import javafx.collections.ObservableList;
+import model.dto.CartItem;
 import model.dto.Item;
 
 public interface ItemService {
@@ -15,4 +16,5 @@ public interface ItemService {
 
     Item searchItem(String itemCode);
 
+    boolean updateItemQty(ObservableList<CartItem> cartOrder);
 }

@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CardItem {
+public class CartItem {
     private String itemCode;
     private String itemDescription;
     private int itemQuantity;

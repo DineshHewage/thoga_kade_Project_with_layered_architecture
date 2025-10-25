@@ -63,11 +63,11 @@ public class ItemRepositoryImpl implements ItemRepository {
         try {
             Connection connection = DBConnection.getInstance().getConnection();
             PreparedStatement psTm = connection.prepareStatement(SQL);
-            psTm.setObject(5,newItem.getItemCode());
-            psTm.setObject(1,newItem.getDescription());
-            psTm.setObject(2,newItem.getPackSize());
-            psTm.setObject(3,newItem.getUnitPrice());
-            psTm.setObject(4,newItem.getQtyOnHand());
+            psTm.setString(5,newItem.getItemCode());
+            psTm.setString(1,newItem.getDescription());
+            psTm.setString(2,newItem.getPackSize());
+            psTm.setDouble(3,newItem.getUnitPrice());
+            psTm.setInt(4,newItem.getQtyOnHand());
             psTm.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -86,5 +86,16 @@ public class ItemRepositoryImpl implements ItemRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+//Update the item table, once the order is placed by the user.
+    @Override
+    public boolean updateItemQuntity(String itemCode, int itemQuantity) throws SQLException {
+        String SQL = "UPDATE item SET QtyOnHand = QtyOnHand - ? WHERE ItemCode = ?";
+        Connection connection = DBConnection.getInstance().getConnection();
+        PreparedStatement psTm = connection.prepareStatement(SQL);
+        psTm.setString(2,itemCode);
+        psTm.setInt(1,itemQuantity);
+//        Return True or False
+        return psTm.executeUpdate()>0;
     }
 }

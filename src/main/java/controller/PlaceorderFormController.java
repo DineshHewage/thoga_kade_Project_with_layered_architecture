@@ -12,14 +12,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
-import model.dto.CardItem;
-import model.dto.Customer;
-import model.dto.Item;
-import model.dto.Orders;
+import model.dto.*;
 import service.PlaceOrderService;
 import service.impl.PlaceOrderServiceImpl;
-
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -53,7 +50,7 @@ public class PlaceorderFormController implements Initializable {
     private Label lblNetTotal;
 
     @FXML
-    private TableView<CardItem> tblAddtoCart;
+    private TableView<CartItem> tblAddtoCart;
 
     @FXML
     private JFXTextField txtOrderId;
@@ -81,7 +78,7 @@ public class PlaceorderFormController implements Initializable {
 
     PlaceOrderService placeOrderService = new PlaceOrderServiceImpl();
 
-    ObservableList<CardItem> addtoCartList = FXCollections.observableArrayList();
+    ObservableList<CartItem> addtoCartList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -98,7 +95,7 @@ public class PlaceorderFormController implements Initializable {
 
     @FXML
     void btnAddToCartOnAction(ActionEvent event) {
-        CardItem cardItem = new CardItem(
+        CartItem cardItem = new CartItem(
                 txtItemCode.getText(),
                 txtItemDescription.getText(),
                 Integer.parseInt(txtQuantity.getText()),
@@ -108,11 +105,11 @@ public class PlaceorderFormController implements Initializable {
         );
         addtoCartList.add(cardItem);
         clearFields();
-        calcukateNewTolat();
+        calculateNewTolat();
     }
 
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) {
+    void btnPlaceOrderOnAction(ActionEvent event) throws SQLException {
         Orders order = new Orders(
                 txtOrderId.getText(),
                 LocalDate.now(),
@@ -151,8 +148,9 @@ public class PlaceorderFormController implements Initializable {
     }
 
     private void clearFields() {
-        txtCustomerId.clear();
-        txtCustomerName.clear();
+//        txtOrderId.clear();
+//        txtCustomerId.clear();
+//        txtCustomerName.clear();
         txtItemCode.clear();
         txtItemDescription.clear();
         txtUnitPrice.clear();
@@ -160,9 +158,9 @@ public class PlaceorderFormController implements Initializable {
         txtQuantity.clear();
     }
 
-    private void calcukateNewTolat(){
+    private void calculateNewTolat(){
         double netTotal = 0;
-        for (CardItem cardItem : addtoCartList) {
+        for (CartItem cardItem : addtoCartList) {
             netTotal += cardItem.getTotalPrice();
             lblNetTotal.setText(String.valueOf(netTotal));
         }

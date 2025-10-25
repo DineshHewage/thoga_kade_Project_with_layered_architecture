@@ -3,6 +3,7 @@ package service.impl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
+import model.dto.CartItem;
 import model.dto.Item;
 import repository.ItemRepository;
 import repository.impl.ItemRepositoryImpl;
@@ -75,5 +76,18 @@ public class ItemServiceImp implements ItemService {
             alert.show();
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean updateItemQty(ObservableList<CartItem> cartOrder) {
+        for(CartItem cartItem : cartOrder) {
+            try {
+//              Return True or False
+                return itemRepository.updateItemQuntity(cartItem.getItemCode(), cartItem.getItemQuantity());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
     }
 }
