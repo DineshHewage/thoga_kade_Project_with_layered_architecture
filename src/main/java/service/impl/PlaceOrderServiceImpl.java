@@ -33,11 +33,14 @@ public class PlaceOrderServiceImpl implements PlaceOrderService {
     public void placeOrder(Orders order, ObservableList<CartItem> cartOrder) throws SQLException {
         Connection connection = null;
             try {
+                // Get the single connection for this transaction
                 connection = DBConnection.getInstance().getConnection();
+                // Turn off auto-commit
                 connection.setAutoCommit(false);
 
-                //Update the order table
+                // Execute operations *using the same connection*
                 boolean isOrderUpdated = orderService.addOrder(order);
+                // check first result before proceeding.
                 if(isOrderUpdated) {
                     //Update the OrderDetail table
                     boolean isOrderDetailUpdated = orderdetailService.addOrderDetails(order, cartOrder);
@@ -45,16 +48,30 @@ public class PlaceOrderServiceImpl implements PlaceOrderService {
                         // Update the Item table
                         boolean isItemUpdated = itemService.updateItemQty(cartOrder);
                         if(isItemUpdated) {
+                            // All parts succeeded, commit the transaction
                             connection.commit();
-                            return;
+                        }else {
+                            connection.rollback();
+                            throw new SQLException("Failed to update item quantity, transaction rolled back.");
                         }
+                    }else {
+                        connection.rollback();
+                        throw new SQLException("Failed to save order details, transaction rolled back.");
                     }
+                }else{
+                    connection.rollback();
+                    throw new SQLException("Failed to save order, transaction rolled back.");
                 }
             } catch (SQLException e) {
-                connection.rollback();
-                throw new RuntimeException(e);
+                if(connection != null) {
+                    connection.rollback();
+                }
+                throw e;
             }finally {
-                connection.setAutoCommit(true);
+                if(connection != null) {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                }
             }
     }
 }
